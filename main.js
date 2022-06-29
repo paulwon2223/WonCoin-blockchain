@@ -50,11 +50,34 @@ class BlockChain{
         // pushes the new block to the chain
         this.chain.push(newBlock);
     }
+
+    // validate the integretiy of the chain 
+    validateChain() {
+        // loops over the chain, starting from the block after the geneis block
+        for (let i = 1; i < this.chain.length; i++) {
+            const currentBlock = this.chain[i];
+            const previousBlock = this.chain[i -1]
+
+            // validates the hash
+            if (currentBlock.hash !== currentBlock.getHash()) {
+                return false;
+            }
+
+            // validates the previoushash
+            if (currentBlock.previousHash !== previousBlock.hash) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 };
 
 // creates a coin called wonCoin, and adds multiple block to its chain 
 let wonCoin = new BlockChain();
 wonCoin.addBlock(new Block(1, "06/08/2022", { amount: 4}));
 wonCoin.addBlock(new Block(1, "06/11/2022", { amount: 10}));
+
+console.log(`Is blockchain of wonCoin valid? ${wonCoin.validateChain()}`);
 
 console.log(JSON.stringify(wonCoin, null, 4));
